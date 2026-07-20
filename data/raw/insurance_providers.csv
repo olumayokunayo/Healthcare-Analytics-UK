@@ -1,0 +1,8 @@
+insurance_id,provider_name,provider_type,contact_region
+1,NHS,Public,UK
+2,Bupa,Private,UK
+3,AXA Health,Private,UK
+4,Aviva Health,Private,UK
+5,Vitality Health,Private,UK
+6,WPA,Private,UK
+7,Self Pay,Private,UK

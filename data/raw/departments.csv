@@ -1,0 +1,13 @@
+department_id,department_name,department_code,clinical_specialty
+1,Cardiology,CARD,Cardiovascular
+2,Oncology,ONCO,Cancer Care
+3,Emergency Medicine,EMER,Emergency Care
+4,Neurology,NEUR,Neurological Care
+5,Orthopaedics,ORTH,Musculoskeletal
+6,General Surgery,SURG,Surgery
+7,Paediatrics,PAED,Children
+8,Obstetrics and Gynaecology,OBGY,Women's Health
+9,Respiratory Medicine,RESP,Respiratory
+10,Gastroenterology,GAST,Digestive Health
+11,Endocrinology,ENDO,Hormonal Disorders
+12,Nephrology,NEPH,Kidney Care

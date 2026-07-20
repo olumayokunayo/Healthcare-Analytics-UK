@@ -1,0 +1,19 @@
+hospital_id,hospital_name,nhs_trust,city,region,postcode,hospital_type,bed_capacity,established_year
+1,University Hospital Coventry,University Hospitals Coventry and Warwickshire NHS Trust,Coventry,West Midlands,CV2 2DX,NHS Trust,1250,1976
+2,Queen Elizabeth Hospital Birmingham,University Hospitals Birmingham NHS Foundation Trust,Birmingham,West Midlands,B15 2GW,NHS Trust,1213,2010
+3,St Thomas' Hospital,Guy's and St Thomas' NHS Foundation Trust,London,London,SE1 7EH,NHS Trust,840,1843
+4,Guy's Hospital,Guy's and St Thomas' NHS Foundation Trust,London,London,SE1 9RT,NHS Trust,600,1721
+5,Addenbrooke's Hospital,Cambridge University Hospitals NHS Foundation Trust,Cambridge,East England,CB2 0QQ,NHS Trust,1100,1766
+6,Royal Free Hospital,Royal Free London NHS Foundation Trust,London,London,NW3 2QG,NHS Trust,839,1828
+7,Manchester Royal Infirmary,Manchester University NHS Foundation Trust,Manchester,North West,M13 9WL,NHS Trust,800,1752
+8,Leeds General Infirmary,Leeds Teaching Hospitals NHS Trust,Leeds,Yorkshire,LS1 3EX,NHS Trust,900,1771
+9,Nottingham City Hospital,Nottingham University Hospitals NHS Trust,Nottingham,East Midlands,NG5 1PB,NHS Trust,1300,1903
+10,John Radcliffe Hospital,Oxford University Hospitals NHS Foundation Trust,Oxford,South East,OX3 9DU,NHS Trust,1000,1979
+11,Royal Stoke University Hospital,University Hospitals of North Midlands NHS Trust,Stoke-on-Trent,West Midlands,ST4 6QG,NHS Trust,1200,2015
+12,Leicester Royal Infirmary,University Hospitals of Leicester NHS Trust,Leicester,East Midlands,LE1 5WW,NHS Trust,850,1771
+13,Southmead Hospital,North Bristol NHS Trust,Bristol,South West,BS10 5NB,NHS Trust,800,2014
+14,University Hospital Southampton,University Hospital Southampton NHS Foundation Trust,Southampton,South East,SO16 6YD,NHS Trust,1200,2012
+15,King's College Hospital,King's College Hospital NHS Foundation Trust,London,London,SE5 9RS,NHS Trust,950,1840
+16,University College Hospital,University College London Hospitals NHS Foundation Trust,London,London,NW1 2BU,NHS Trust,800,2005
+17,Royal Victoria Infirmary,The Newcastle upon Tyne Hospitals NHS Foundation Trust,Newcastle,North East,NE1 4LP,NHS Trust,900,1906
+18,Royal Hallamshire Hospital,Sheffield Teaching Hospitals NHS Foundation Trust,Sheffield,Yorkshire,S10 2JF,NHS Trust,750,1979
