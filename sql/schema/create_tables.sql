@@ -133,9 +133,9 @@ CREATE TABLE doctors (
     hire_date DATE,
 
 
-    hospital_id INT,
+    hospital_id INT NOT NULL,
 
-    department_id INT,
+    department_id INT NOT NULL,
 
 
     CONSTRAINT fk_doctor_hospital
@@ -171,7 +171,7 @@ CREATE TABLE patients (
 
     date_of_birth DATE,
 
-    nhs_number VARCHAR(10),
+    nhs_number VARCHAR(12),
 
     postcode VARCHAR(10),
 
@@ -181,7 +181,16 @@ CREATE TABLE patients (
 
     marital_status VARCHAR(30),
 
-    registration_date DATE
+    registration_date DATE,
+
+    insurance_id INT NOT NULL,
+
+
+    CONSTRAINT fk_patient_insurance
+
+    FOREIGN KEY (insurance_id)
+
+    REFERENCES insurance_providers(insurance_id)
 
 );
 
@@ -191,45 +200,90 @@ CREATE TABLE patients (
 -- 8. ADMISSIONS TABLE
 -- =====================================================
 
+-- =====================================================
+-- ADMISSIONS TABLE
+-- Central healthcare activity table
+-- =====================================================
+
+
 CREATE TABLE admissions (
 
     admission_id INT AUTO_INCREMENT PRIMARY KEY,
 
 
-    patient_id INT,
+    -- Relationships
+    patient_id INT NOT NULL,
 
-    doctor_id INT,
+    doctor_id INT NOT NULL,
 
-    diagnosis_id INT,
+    diagnosis_id INT NOT NULL,
 
     medication_id INT,
 
 
-    admission_date DATE,
+    -- Location
+    hospital_id INT NOT NULL,
+
+    department_id INT NOT NULL,
+
+
+
+    -- Admission Dates
+    admission_date DATE NOT NULL,
 
     discharge_date DATE,
 
 
+    -- Admission Details
     admission_type VARCHAR(50),
-
+    
+    -- Emergency, Elective, Urgent
     admission_source VARCHAR(50),
+    
+    -- GP Referral, Emergency Department, Transfer
 
     referral_type VARCHAR(50),
 
-    emergency_flag BOOLEAN,
 
-    readmission_flag BOOLEAN,
+    -- Clinical Indicators
+    emergency_flag BOOLEAN DEFAULT FALSE,
+
+    readmission_flag BOOLEAN DEFAULT FALSE,
 
 
-    ward VARCHAR(50),
+    -- Ward Information
+    ward VARCHAR(100),
 
+    bed_number VARCHAR(20),
+
+
+    -- Length of Stay
     length_of_stay INT,
 
+
+    -- Patient Outcome
     admission_status VARCHAR(50),
+    
+    -- Discharged, Transferred, Deceased
+
+
+    discharge_destination VARCHAR(100),
+    
+    -- Home, Care Home, Another Hospital
 
 
 
-    CONSTRAINT fk_admission_patient
+    -- Audit Fields
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+
+
+    -- =====================================================
+    -- FOREIGN KEYS
+    -- =====================================================
+
+
+    CONSTRAINT fk_admissions_patient
 
     FOREIGN KEY(patient_id)
 
@@ -237,7 +291,7 @@ CREATE TABLE admissions (
 
 
 
-    CONSTRAINT fk_admission_doctor
+    CONSTRAINT fk_admissions_doctor
 
     FOREIGN KEY(doctor_id)
 
@@ -245,7 +299,7 @@ CREATE TABLE admissions (
 
 
 
-    CONSTRAINT fk_admission_diagnosis
+    CONSTRAINT fk_admissions_diagnosis
 
     FOREIGN KEY(diagnosis_id)
 
@@ -253,16 +307,29 @@ CREATE TABLE admissions (
 
 
 
-    CONSTRAINT fk_admission_medication
+    CONSTRAINT fk_admissions_medication
 
     FOREIGN KEY(medication_id)
 
-    REFERENCES medications(medication_id)
+    REFERENCES medications(medication_id),
+
+
+
+    CONSTRAINT fk_admissions_hospital
+
+    FOREIGN KEY(hospital_id)
+
+    REFERENCES hospitals(hospital_id),
+
+
+
+    CONSTRAINT fk_admissions_department
+
+    FOREIGN KEY(department_id)
+
+    REFERENCES departments(department_id)
 
 );
-
-
-
 -- =====================================================
 -- 9. BILLING TABLE
 -- =====================================================
@@ -272,9 +339,9 @@ CREATE TABLE billing (
     billing_id INT AUTO_INCREMENT PRIMARY KEY,
 
 
-    admission_id INT,
+   admission_id INT NOT NULL,
 
-    insurance_id INT,
+   insurance_id INT NOT NULL,
 
 
     invoice_number VARCHAR(50),

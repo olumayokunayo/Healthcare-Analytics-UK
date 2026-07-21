@@ -3,35 +3,36 @@ import random
 import os
 
 from faker import Faker
-from datetime import timedelta
 
 
-fake = Faker()
+fake = Faker("en_GB")
 
-
-# =====================================
-# SETTINGS
-# =====================================
 
 output_folder = "data/raw"
 
-number_of_admissions = 50000
 
-
-# =====================================
-# Load reference data
-# =====================================
+# ================================
+# Load reference tables
+# ================================
 
 patients = pd.read_csv(
     f"{output_folder}/patients.csv"
 )
 
-hospitals = pd.read_csv(
-    f"{output_folder}/hospitals.csv"
-)
-
 doctors = pd.read_csv(
     f"{output_folder}/doctors.csv"
+)
+
+diagnoses = pd.read_csv(
+    f"{output_folder}/diagnoses.csv"
+)
+
+medications = pd.read_csv(
+    f"{output_folder}/medications.csv"
+)
+
+hospitals = pd.read_csv(
+    f"{output_folder}/hospitals.csv"
 )
 
 departments = pd.read_csv(
@@ -39,96 +40,109 @@ departments = pd.read_csv(
 )
 
 
+# ================================
+# Settings
+# ================================
 
-# =====================================
-# Reference values
-# =====================================
-
-diagnoses = [
-
-    "Cardiovascular Disease",
-    "Cancer Treatment",
-    "Respiratory Infection",
-    "Diabetes",
-    "Stroke",
-    "Fracture",
-    "Pneumonia",
-    "Kidney Disease",
-    "Neurological Disorder",
-    "Routine Checkup"
-
-]
+number_of_admissions = 50000
 
 
 admission_types = [
-
     "Emergency",
-    "Urgent",
-    "Routine"
-
+    "Elective",
+    "Urgent"
 ]
 
 
-# =====================================
-# Generate admissions
-# =====================================
+sources = [
+    "GP Referral",
+    "Emergency Department",
+    "Transfer"
+]
 
+
+referrals = [
+    "GP",
+    "Consultant",
+    "Self Referral"
+]
+
+
+statuses = [
+    "Discharged",
+    "Transferred",
+    "Under Treatment"
+]
+
+
+wards = [
+    "Ward A",
+    "Ward B",
+    "Ward C",
+    "ICU",
+    "Surgical Ward"
+]
+
+
+destinations = [
+    "Home",
+    "Care Home",
+    "Another Hospital"
+]
+
+
+# ================================
+# Generate admissions
+# ================================
 
 admissions = []
 
 
 for i in range(1, number_of_admissions + 1):
 
-
     patient = patients.sample(1).iloc[0]
 
-    hospital = hospitals.sample(1).iloc[0]
-
     doctor = doctors.sample(1).iloc[0]
+
+    diagnosis = diagnoses.sample(1).iloc[0]
+
+    medication = medications.sample(1).iloc[0]
+
+    hospital = hospitals.sample(1).iloc[0]
 
     department = departments.sample(1).iloc[0]
 
 
     admission_date = fake.date_between(
-
-        start_date="-3y",
-
+        start_date="-5y",
         end_date="today"
-
     )
 
 
-    length_of_stay = random.randint(1,14)
+    length_of_stay = random.randint(1,20)
 
 
     discharge_date = (
-
         pd.to_datetime(admission_date)
-
-        + timedelta(days=length_of_stay)
-
+        +
+        pd.Timedelta(days=length_of_stay)
     ).date()
 
 
 
-    treatment_cost = round(
-
-        random.uniform(500,15000),
-
-        2
-
-    )
-
-
     admissions.append([
 
-        f"ADM{i:07d}",
+        i,
 
         patient["patient_id"],
 
-        hospital["hospital_id"],
-
         doctor["doctor_id"],
+
+        diagnosis["diagnosis_id"],
+
+        medication["medication_id"],
+
+        hospital["hospital_id"],
 
         department["department_id"],
 
@@ -136,23 +150,35 @@ for i in range(1, number_of_admissions + 1):
 
         discharge_date,
 
-        length_of_stay,
-
         random.choice(admission_types),
 
-        random.choice(diagnoses),
+        random.choice(sources),
 
-        treatment_cost
+        random.choice(referrals),
+
+        random.choice([0,1]),
+
+        random.choice([0,1]),
+
+        random.choice(wards),
+
+        f"BED-{random.randint(1,300)}",
+
+        length_of_stay,
+
+        random.choice(statuses),
+
+        random.choice(destinations)
 
     ])
 
 
 
-# =====================================
-# Create dataframe
-# =====================================
+# ================================
+# Dataframe
+# ================================
 
-admissions_df = pd.DataFrame(
+df = pd.DataFrame(
 
     admissions,
 
@@ -162,9 +188,13 @@ admissions_df = pd.DataFrame(
 
         "patient_id",
 
-        "hospital_id",
-
         "doctor_id",
+
+        "diagnosis_id",
+
+        "medication_id",
+
+        "hospital_id",
 
         "department_id",
 
@@ -172,32 +202,36 @@ admissions_df = pd.DataFrame(
 
         "discharge_date",
 
-        "length_of_stay",
-
         "admission_type",
 
-        "diagnosis",
+        "admission_source",
 
-        "treatment_cost"
+        "referral_type",
+
+        "emergency_flag",
+
+        "readmission_flag",
+
+        "ward",
+
+        "bed_number",
+
+        "length_of_stay",
+
+        "admission_status",
+
+        "discharge_destination"
 
     ]
 
 )
 
 
-
-# =====================================
-# Export
-# =====================================
-
-admissions_df.to_csv(
-
+df.to_csv(
     f"{output_folder}/admissions.csv",
-
     index=False
-
 )
 
 
-
 print("Admissions dataset generated successfully!")
+print(f"Generated {number_of_admissions} admissions")

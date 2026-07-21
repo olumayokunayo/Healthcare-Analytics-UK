@@ -5,38 +5,35 @@ import os
 from faker import Faker
 
 
-fake = Faker()
+fake = Faker("en_GB")
 
 
-# ===================================
-# Settings
-# ===================================
+# ==================================
+# File locations
+# ==================================
 
 output_folder = "data/raw"
 
 os.makedirs(output_folder, exist_ok=True)
 
 
-number_of_patients = 10000
-
-
-# ===================================
-# Reference data
-# ===================================
+# ==================================
+# Load insurance providers
+# ==================================
 
 insurance = pd.read_csv(
     f"{output_folder}/insurance_providers.csv"
 )
 
 
-# ===================================
-# Generate patients
-# ===================================
+# ==================================
+# Settings
+# ==================================
 
-patients = []
+number_of_patients = 10000
 
 
-blood_types = [
+blood_groups = [
     "A+",
     "A-",
     "B+",
@@ -48,68 +45,104 @@ blood_types = [
 ]
 
 
-genders = [
-    "Male",
-    "Female"
+ethnicities = [
+    "White British",
+    "Black British",
+    "Asian British",
+    "Mixed",
+    "Other"
 ]
 
 
-cities = [
-    "Coventry",
-    "Birmingham",
-    "London",
-    "Manchester",
-    "Leeds",
-    "Bristol",
-    "Nottingham",
-    "Sheffield",
-    "Oxford",
-    "Cambridge"
+marital_status = [
+    "Single",
+    "Married",
+    "Divorced",
+    "Widowed"
 ]
+
+
+# ==================================
+# Generate patients
+# ==================================
+
+patients = []
 
 
 for i in range(1, number_of_patients + 1):
-
-    first_name = fake.first_name()
-    last_name = fake.last_name()
-
 
     insurance_provider = insurance.sample(1).iloc[0]
 
 
     patients.append([
 
-        f"PAT{i:06d}",
+        # patient_id
+        i,
 
-        first_name,
+        # names
+        fake.first_name(),
+        fake.last_name(),
 
-        last_name,
+        # gender
+        random.choice([
+            "Male",
+            "Female"
+        ]),
 
-        f"{first_name} {last_name}",
 
-        random.choice(genders),
-
-        random.randint(0,95),
-
-        random.choice(blood_types),
-
-        random.choice(cities),
-
-        random.choice(
-            ["UK", "UK"]
+        # DOB
+        fake.date_of_birth(
+            minimum_age=18,
+            maximum_age=90
         ),
 
-        insurance_provider["insurance_id"],
 
-        insurance_provider["provider_name"]
+        # NHS number
+        str(random.randint(
+            1000000000,
+            9999999999
+        )),
+
+
+        # postcode
+        fake.postcode(),
+
+
+        # blood group
+        random.choice(
+            blood_groups
+        ),
+
+
+        # ethnicity
+        random.choice(
+            ethnicities
+        ),
+
+
+        # marital status
+        random.choice(
+            marital_status
+        ),
+
+
+        # registration date
+        fake.date_between(
+            start_date="-10y",
+            end_date="today"
+        ),
+
+
+        # insurance FK
+        insurance_provider["insurance_id"]
 
     ])
 
 
 
-# ===================================
-# Create dataframe
-# ===================================
+# ==================================
+# Dataframe
+# ==================================
 
 patient_df = pd.DataFrame(
 
@@ -118,26 +151,17 @@ patient_df = pd.DataFrame(
     columns=[
 
         "patient_id",
-
         "first_name",
-
         "last_name",
-
-        "full_name",
-
         "gender",
-
-        "age",
-
-        "blood_type",
-
-        "city",
-
-        "country",
-
-        "insurance_id",
-
-        "insurance_provider"
+        "date_of_birth",
+        "nhs_number",
+        "postcode",
+        "blood_group",
+        "ethnicity",
+        "marital_status",
+        "registration_date",
+        "insurance_id"
 
     ]
 
@@ -145,17 +169,15 @@ patient_df = pd.DataFrame(
 
 
 
-# ===================================
+# ==================================
 # Export
-# ===================================
+# ==================================
 
 patient_df.to_csv(
-
     f"{output_folder}/patients.csv",
-
     index=False
-
 )
 
 
 print("Patients dataset generated successfully!")
+print(f"Generated {number_of_patients} patients")

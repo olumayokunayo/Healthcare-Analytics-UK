@@ -1,0 +1,21 @@
+diagnosis_id,diagnosis_name,category
+1,Hypertension,Cardiovascular
+2,Heart Failure,Cardiovascular
+3,Stroke,Neurological
+4,Epilepsy,Neurological
+5,Brain Tumour,Neurological
+6,Breast Cancer,Oncology
+7,Lung Cancer,Oncology
+8,Prostate Cancer,Oncology
+9,Type 2 Diabetes,Endocrinology
+10,Thyroid Disorder,Endocrinology
+11,Pneumonia,Respiratory
+12,Asthma,Respiratory
+13,COPD,Respiratory
+14,Kidney Disease,Renal
+15,Kidney Failure,Renal
+16,Hip Fracture,Orthopaedics
+17,Bone Injury,Orthopaedics
+18,Appendicitis,General Surgery
+19,Gallstones,General Surgery
+20,Routine Health Check,Preventive Care

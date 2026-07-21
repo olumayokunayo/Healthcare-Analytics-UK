@@ -5,21 +5,21 @@ import os
 from faker import Faker
 
 
-fake = Faker()
+fake = Faker("en_GB")
 
 
-# ================================
+# ==================================
 # File locations
-# ================================
+# ==================================
 
 output_folder = "data/raw"
 
 os.makedirs(output_folder, exist_ok=True)
 
 
-# ================================
+# ==================================
 # Load reference tables
-# ================================
+# ==================================
 
 hospitals = pd.read_csv(
     f"{output_folder}/hospitals.csv"
@@ -30,92 +30,133 @@ departments = pd.read_csv(
 )
 
 
-# ================================
+# ==================================
 # Doctor settings
-# ================================
+# ==================================
 
 number_of_doctors = 500
 
 
-employment_types = [
+specialties = [
+    "Cardiology",
+    "Neurology",
+    "Emergency Medicine",
+    "Oncology",
+    "General Surgery",
+    "Paediatrics",
+    "Orthopaedics",
+    "Radiology",
+    "Psychiatry",
+    "Gastroenterology"
+]
+
+
+consultant_levels = [
     "Consultant",
+    "Senior Consultant",
+    "Clinical Lead",
     "Specialist",
-    "Registrar",
-    "Junior Doctor"
+    "Registrar"
 ]
 
 
-salary_bands = [
-    "NHS Band 6",
-    "NHS Band 7",
-    "NHS Band 8A",
-    "NHS Band 8B",
-    "NHS Band 8C",
-    "NHS Band 9"
+employment_types = [
+    "Permanent",
+    "Full Time",
+    "Part Time",
+    "Locum"
 ]
 
 
-# ================================
+# ==================================
 # Generate doctors
-# ================================
+# ==================================
 
 doctors = []
 
 
 for i in range(1, number_of_doctors + 1):
 
-    first_name = fake.first_name()
-    last_name = fake.last_name()
-
     hospital = hospitals.sample(1).iloc[0]
+
     department = departments.sample(1).iloc[0]
 
 
     doctors.append([
-        f"DOC{i:04d}",
-        first_name,
-        last_name,
-        f"Dr {first_name} {last_name}",
-        random.choice(
-            ["Male", "Female"]
-        ),
-        department["department_id"],
-        department["department_name"],
-        hospital["hospital_id"],
-        hospital["hospital_name"],
+
+        # doctor_id
+        i,
+
+        # names
+        fake.first_name(),
+        fake.last_name(),
+
+        # gender
+        random.choice([
+            "Male",
+            "Female"
+        ]),
+
+        # specialty
+        random.choice(specialties),
+
+        # experience
+        random.randint(1,35),
+
+        # consultant level
+        random.choice(consultant_levels),
+
+        # GMC number
+        f"GMC{random.randint(1000000,9999999)}",
+
+        # employment
         random.choice(employment_types),
-        random.randint(2,35),
-        random.choice(salary_bands)
+
+        # hire date
+        fake.date_between(
+            start_date="-25y",
+            end_date="-1y"
+        ),
+
+        # hospital FK
+        hospital["hospital_id"],
+
+        # department FK
+        department["department_id"]
+
     ])
 
 
 
-# ================================
+# ==================================
 # Create dataframe
-# ================================
+# ==================================
 
 doctor_df = pd.DataFrame(
     doctors,
     columns=[
+
         "doctor_id",
         "first_name",
         "last_name",
-        "full_name",
         "gender",
-        "department_id",
-        "department_name",
-        "hospital_id",
-        "hospital_name",
-        "employment_type",
+        "specialty",
         "years_experience",
-        "salary_band"
+        "consultant_level",
+        "gmc_number",
+        "employment_type",
+        "hire_date",
+        "hospital_id",
+        "department_id"
+
     ]
 )
 
 
-# ================================
-# Export CSV
-# ================================
+
+# ==================================
+# Export
+# ==================================
 
 doctor_df.to_csv(
     f"{output_folder}/doctors.csv",
@@ -124,3 +165,4 @@ doctor_df.to_csv(
 
 
 print("Doctors dataset generated successfully!")
+print(f"Generated {number_of_doctors} doctors")

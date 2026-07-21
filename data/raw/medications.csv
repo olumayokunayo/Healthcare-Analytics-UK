@@ -1,0 +1,19 @@
+medication_id,medication_name,medication_type
+1,Amlodipine,Cardiovascular
+2,Ramipril,Cardiovascular
+3,Atorvastatin,Cholesterol Management
+4,Metformin,Diabetes
+5,Insulin,Diabetes
+6,Salbutamol,Respiratory
+7,Budesonide,Respiratory
+8,Paracetamol,Pain Relief
+9,Ibuprofen,Pain Relief
+10,Morphine,Pain Management
+11,Warfarin,Blood Thinner
+12,Aspirin,Blood Thinner
+13,Amoxicillin,Antibiotic
+14,Cefalexin,Antibiotic
+15,Omeprazole,Digestive System
+16,Levothyroxine,Hormone Therapy
+17,Chemotherapy Drugs,Cancer Treatment
+18,Radiotherapy Medication,Cancer Treatment
